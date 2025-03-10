@@ -1,6 +1,9 @@
 {
     "files.associations": {
         "*.yarnproject": "jsonc",
-        "winuser.h": "c"
+        "winuser.h": "c",
+        "stdint.h": "c",
+        "windows.h": "c",
+        "block.h": "c"
     }
 }
