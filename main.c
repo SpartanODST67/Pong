@@ -22,6 +22,18 @@ int main(int argc, char* argv[]) {
     ball.position.x = (gameBorder.x / 2);
     ball.position.y = (gameBorder.y / 2);
 
-    printf("Game dimensions: %fx%f, Ball at: (%f, %f)", gameBoarder.x, gameBoarder.y, ball.position.x, ball.position.y);
+    Block leftPaddle;
+    leftPaddle.dimensions.x = 20;
+    leftPaddle.dimensions.y = ball.dimensions.y * 4;
+    leftPaddle.position.x = 40;
+    leftPaddle.position.y = gameBorder.y / 2;
+
+    Block rightPaddle;
+    rightPaddle.dimensions.x = 20;
+    rightPaddle.dimensions.y = ball.dimensions.y * 4;
+    rightPaddle.position.x = gameBorder.x - 40;
+    rightPaddle.position.y = gameBorder.y / 2;
+
+    printf("Game dimensions: %fx%f, Ball at: (%f, %f)", gameBorder.x, gameBorder.y, ball.position.x, ball.position.y);
     return 0;
 }
