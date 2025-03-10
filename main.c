@@ -67,7 +67,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
         windowClassName,
         "Pong",
         WS_OVERLAPPEDWINDOW,
-        CW_USEDEFAULT, CW_USEDEFAULT, gameBorder.x, gameBorder.y,
+        CW_USEDEFAULT, CW_USEDEFAULT, gameBorder.x + 20, gameBorder.y + 45,
         NULL, NULL, hInstance, NULL
     );
 
