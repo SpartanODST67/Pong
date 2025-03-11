@@ -3,10 +3,16 @@
 
 #include "block.h"
 
+DWORD WINAPI gameLoop(LPVOID);
 void drawScreen(HDC, Vector2, Block, Block, Block);
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
 
 const char windowClassName[] = "PongWindowClass";
+Vector2 gameBorder;
+Block ball;
+Block leftPaddle;
+Block rightPaddle;
+HWND hwnd;
 
 /*
     Entry point of Windows Program.
@@ -20,11 +26,9 @@ const char windowClassName[] = "PongWindowClass";
 */
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
     
-    Vector2 gameBorder;
     gameBorder.x = 960;
     gameBorder.y = 520;
 
-    Block ball;
     ball.dimensions.x = 10;
     ball.dimensions.y = 10;
     ball.position.x = (gameBorder.x / 2);
@@ -32,20 +36,17 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     ball.velocity.x = 5;
     ball.velocity.y = 5;
 
-    Block leftPaddle;
     leftPaddle.dimensions.x = 20;
     leftPaddle.dimensions.y = ball.dimensions.y * 4;
     leftPaddle.position.x = 40;
     leftPaddle.position.y = gameBorder.y / 2;
 
-    Block rightPaddle;
     rightPaddle.dimensions.x = 20;
     rightPaddle.dimensions.y = ball.dimensions.y * 4;
     rightPaddle.position.x = gameBorder.x - 40;
     rightPaddle.position.y = gameBorder.y / 2;
     
     WNDCLASSEX wc;
-    HWND hwnd;
     MSG msg;
     
     //Registering window class.
@@ -95,7 +96,17 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     }
 
     ShowWindow(hwnd, nCmdShow);
-    //UpdateWindow(hwnd);
+
+    //Create gameloop thread.
+    DWORD gameLoopThreadID;
+    HANDLE gameLoopThread = CreateThread(
+        NULL,
+        0,
+        gameLoop,
+        NULL,
+        0,
+        &gameLoopThreadID
+    );
 
     //Message loop.
     /*
@@ -109,8 +120,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     */
     while(GetMessage(&msg, NULL, 0, 0) > 0) {
         TranslateMessage(&msg); //Translates keystrokes to chars. Remeber to call it before DispatchMessage();
-        ball.position = moveBall(&ball, leftPaddle, rightPaddle, gameBorder);
-        //Sleep((1.0f/60.0f) * 1000.0f);
         DispatchMessage(&msg); // Tells OS to call wind proc.
     }
 
@@ -154,9 +163,21 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
     return 0;
 }
 
+DWORD WINAPI gameLoop(LPVOID lpParam) {
+    for(int i = 0; i < 1000; i++) {
+        ball.position = moveBall(&ball, leftPaddle, rightPaddle, gameBorder);
+        InvalidateRect(hwnd, NULL, TRUE); //Invalidates entire window.
+        UpdateWindow(hwnd); //Forces repaint.
+        Sleep((1.0f/60.0f) * 1000.0f);
+    }
+
+    return 0;
+}
+
 void drawScreen(HDC screen, Vector2 dimensions, Block ball, Block leftPaddle, Block rightPaddle) {
     HBRUSH brush = CreateSolidBrush(RGB(255, 255, 255));
     SelectObject(screen, brush);
+
     //Draw Ball
     Rectangle(screen, ball.position.x - (ball.dimensions.x / 2), (ball.position.y + ball.dimensions.y / 2),
                 ball.position.x + (ball.dimensions.x / 2), ball.position.y - (ball.dimensions.y / 2));
