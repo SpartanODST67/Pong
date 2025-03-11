@@ -8,9 +8,16 @@ LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
 
 const char windowClassName[] = "PongWindowClass";
 
-/*int main(int argc, char* argv[]) {    
-}*/
-
+/*
+    Entry point of Windows Program.
+    Params:
+        hInstance - Handle to an instance. Used to ID exe in mem.
+        hPrevInstance - Unused. Relic of 16-bit Windows. Always 0.
+        lpCmdLine - Command line args.
+        nCmdShow - Dictates if window is minimized, maximized, or shown normally.
+    Returns: int (unused by OS but can be used by other processes).
+    WINAPI - Calling Convention - defines the order that parameters appear on the stack.
+*/
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
     
     Vector2 gameBorder;
