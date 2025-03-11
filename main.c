@@ -51,17 +51,18 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     //Registering window class.
     wc.cbSize = sizeof(WNDCLASSEX);
     wc.style = 0;
-    wc.lpfnWndProc = WndProc;
+    wc.lpfnWndProc = WndProc; // The window procedure.
     wc.cbClsExtra = 0;
     wc.cbWndExtra = 0;
-    wc.hInstance = hInstance;
+    wc.hInstance = hInstance; // Handle to application instance.
     wc.hIcon = LoadIcon(NULL, IDI_APPLICATION);
     wc.hCursor = LoadCursor(NULL, IDC_ARROW);
     wc.hbrBackground = CreateSolidBrush(RGB(0,0,0));
     wc.lpszMenuName = NULL;
-    wc.lpszClassName = windowClassName;
+    wc.lpszClassName = windowClassName; // String to ID window class.
     wc.hIconSm = LoadIcon(NULL, IDI_APPLICATION);
 
+    //Registers window class with OS.
     if(!RegisterClassEx(&wc)) {
         MessageBox(NULL, "Window Registration Failed!", "Error!", 
             MB_ICONEXCLAMATION | MB_OK);
@@ -70,33 +71,36 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
     //Creating Window
     hwnd = CreateWindowEx(
-        WS_EX_CLIENTEDGE,
-        windowClassName,
-        "Pong",
-        WS_OVERLAPPEDWINDOW,
-        CW_USEDEFAULT, CW_USEDEFAULT, gameBorder.x + 20, gameBorder.y + 45,
-        NULL, NULL, hInstance, NULL
+        0,                   // Optional window styles
+        windowClassName,     // Window class (Identical to the one used for registration)
+        "Pong",              // Window Text (Used in different ways depending on style. Name presented on the title bar.)
+        WS_OVERLAPPEDWINDOW, // Window Style (WS_OVERLAPPEDWINDOW is a constant that is an bitwise OR of multiple styles).
+
+        //Size and position
+        CW_USEDEFAULT,     
+        CW_USEDEFAULT,     
+        gameBorder.x + 20, // Width
+        gameBorder.y + 45, // Height
+        
+        NULL,       // Parent Window (Null for top level windows)
+        NULL,       // Menu
+        hInstance,  // Instance Handle
+        NULL        // Additional application data (void*) for wind proc.
     );
 
     if(hwnd == NULL) {
-        MessageBox(NULL, "Window Creating Failed!", "Error!", 
+        MessageBox(NULL, "Window Creation Failed!", "Error!", 
             MB_ICONEXCLAMATION | MB_OK);
         return 0;
     }
 
     ShowWindow(hwnd, nCmdShow);
-    UpdateWindow(hwnd);
+    //UpdateWindow(hwnd);
 
-    HDC screen = GetDC(hwnd);
-    if(screen == NULL) {
-        fprintf(stderr, "Failed to get screen context.\n");
-        return -1;
-    }
-
+    //Message loop.
     while(GetMessage(&msg, NULL, 0, 0) > 0) {
         TranslateMessage(&msg);
         ball.position = moveBall(&ball, leftPaddle, rightPaddle, gameBorder);
-        drawScreen(screen, gameBorder, ball, leftPaddle, rightPaddle);
         //Sleep((1.0f/60.0f) * 1000.0f);
         DispatchMessage(&msg);
     }
@@ -112,6 +116,17 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
         case WM_DESTROY:
             PostQuitMessage(0);
             break;
+        case WM_PAINT:
+        {
+            PAINTSTRUCT ps;
+            HDC screen = BeginPaint(hwnd, &ps);
+
+            //All painting here.
+            drawScreen(screen, gameBorder, ball, leftPaddle, rightPaddle);
+
+            EndPaint(hwnd, &ps);
+        }
+        break;
         default:
         return DefWindowProc(hwnd, msg, wParam, lParam);
     }
