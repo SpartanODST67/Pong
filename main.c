@@ -98,11 +98,20 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     //UpdateWindow(hwnd);
 
     //Message loop.
+    /*
+        GetMessage gets the first message from the message queue.
+        Params:
+            msg = address of MSG struct to place message info into.
+            Other params allows filtering of messages and are commonly set to NULL and 0.
+
+        Posting a message enqueues a message.
+        Sending a message skips the queue.
+    */
     while(GetMessage(&msg, NULL, 0, 0) > 0) {
-        TranslateMessage(&msg);
+        TranslateMessage(&msg); //Translates keystrokes to chars. Remeber to call it before DispatchMessage();
         ball.position = moveBall(&ball, leftPaddle, rightPaddle, gameBorder);
         //Sleep((1.0f/60.0f) * 1000.0f);
-        DispatchMessage(&msg);
+        DispatchMessage(&msg); // Tells OS to call wind proc.
     }
 
     return msg.wParam;
@@ -114,7 +123,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
             DestroyWindow(hwnd);
             break;
         case WM_DESTROY:
-            PostQuitMessage(0);
+            PostQuitMessage(0); //Used to break out of message loop.
             break;
         case WM_PAINT:
         {
