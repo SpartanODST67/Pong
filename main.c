@@ -100,12 +100,12 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     //Create gameloop thread.
     DWORD gameLoopThreadID;
     HANDLE gameLoopThread = CreateThread(
-        NULL,
-        0,
-        gameLoop,
-        NULL,
-        0,
-        &gameLoopThreadID
+        NULL, // Security attributes (Default)
+        0, // Stack size (Default)
+        gameLoop, // Thread function
+        NULL, // Argument to thread func
+        0, // Creation flags (default)
+        &gameLoopThreadID // Returns Thread ID.
     );
 
     //Message loop.
@@ -123,6 +123,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
         DispatchMessage(&msg); // Tells OS to call wind proc.
     }
 
+    CloseHandle(gameLoopThread);
+    
     return msg.wParam;
 }
 
