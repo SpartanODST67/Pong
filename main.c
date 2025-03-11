@@ -117,6 +117,13 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     return msg.wParam;
 }
 
+/// @brief Handles the message that targeted the window. Typically a large switch statement that defines the behaviour of each response.
+/// @param hwnd Window Handle. 
+/// @param msg Message code to handle.
+/// @param wParam Additional data to the message. Int vals of size of pointer width. Look up message to cast to proper data type.
+/// @param lParam Additional data to the message. Int vals of size of pointer width. Look up message to cast to proper data type.
+/// @return Int val that represents response to message.
+//  CALLBACK: calling convention. 
 LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
     switch(msg) {
         case WM_CLOSE:
@@ -137,7 +144,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
         }
         break;
         default:
-        return DefWindowProc(hwnd, msg, wParam, lParam);
+        return DefWindowProc(hwnd, msg, wParam, lParam); // Performs default action to message.
     }
     return 0;
 }
