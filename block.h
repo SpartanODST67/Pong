@@ -6,6 +6,8 @@ struct Block {
     Vector2 velocity;
 } typedef Block;
 
+Block createBlock(float, float, float, float, float, float);
+Block createBall(float, float, int);
 Vector2 moveBall(Block*, Block, Block, Vector2);
 int hitPaddle(Block, Block);
 Vector2 movePaddle(char, Block, Vector2);

@@ -1,4 +1,38 @@
+#include <stdlib.h>
 #include "block.h"
+
+Block createBlock(float width, float height, float xCord, float yCord, float horVelocity, float vertVelocity) {
+    Block res;
+    res.dimensions.x = width;
+    res.dimensions.y = height;
+    res.position.x = xCord;
+    res.position.y = yCord;
+    res.velocity.x = horVelocity;
+    res.velocity.y = vertVelocity;
+
+    return res;
+}
+
+Block createBall(float xCord, float yCord, int direction) {
+    Block ball = createBlock(10, 10, xCord, yCord, 0, 0);
+
+    ball.velocity.x = 5;
+    if(direction == 0) { //Random direction
+        if(rand() % 2 == 0) {
+            ball.velocity.x = -ball.velocity.x;
+        }
+    }
+    else if(direction < 0) {
+        ball.velocity.x = -ball.velocity.x;
+    }
+
+    ball.velocity.y = 5;
+    if(rand() % 2 == 0) {
+        ball.velocity.y = -ball.velocity.y;
+    }
+
+    return ball;
+}
 
 Vector2 moveBall(Block* ball, Block leftPaddle, Block rightPaddle, Vector2 gameBorder) {
     ball->position.x += ball->velocity.x;

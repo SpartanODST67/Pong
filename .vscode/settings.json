@@ -4,6 +4,7 @@
         "winuser.h": "c",
         "stdint.h": "c",
         "windows.h": "c",
-        "block.h": "c"
+        "block.h": "c",
+        "vector2.h": "c"
     }
 }

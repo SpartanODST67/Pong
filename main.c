@@ -29,12 +29,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     gameBorder.x = 960;
     gameBorder.y = 520;
 
-    ball.dimensions.x = 10;
-    ball.dimensions.y = 10;
-    ball.position.x = (gameBorder.x / 2);
-    ball.position.y = (gameBorder.y / 2);
-    ball.velocity.x = 5;
-    ball.velocity.y = 5;
+    ball = createBall(gameBorder.x / 2, gameBorder.y / 2, 0);
 
     leftPaddle.dimensions.x = 20;
     leftPaddle.dimensions.y = ball.dimensions.y * 10;
@@ -179,22 +174,24 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 DWORD WINAPI gameLoop(LPVOID lpParam) {
     int player1Score = 0;
     int player2Score = 0;
-    BOOL scored = FALSE;
+    int scored = 0;
     
     while(player1Score < 10 && player2Score < 10) {
         ball.position = moveBall(&ball, leftPaddle, rightPaddle, gameBorder);
     
         if(ball.position.x - (ball.dimensions.x / 2) <= 0) {
             player2Score++;
-            scored = TRUE;
+            scored = 2;
         }
         else if(ball.position.x + (ball.dimensions.x / 2) >= gameBorder.x) {
             player1Score++;
-            scored = TRUE;
+            scored = 1;
         }
 
-        if(scored) {
-            scored = FALSE;
+        if(scored != 0) {
+            if(scored == 1) ball = createBall(gameBorder.x / 2, gameBorder.y / 2, -1);
+            else ball = createBall(gameBorder.x / 2, gameBorder.y / 2, 1);
+            scored = 0;
         }
         
         InvalidateRect(hwnd, NULL, TRUE); //Invalidates entire window.
