@@ -4,7 +4,7 @@
 #include "block.h"
 
 DWORD WINAPI gameLoop(LPVOID);
-void drawScreen(HDC, Vector2, Block, Block, Block);
+void drawScreen(HDC, Block, Block, Block);
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
 
 const char windowClassName[] = "PongWindowClass";
@@ -14,16 +14,13 @@ Block leftPaddle;
 Block rightPaddle;
 HWND hwnd;
 
-/*
-    Entry point of Windows Program.
-    Params:
-        hInstance - Handle to an instance. Used to ID exe in mem.
-        hPrevInstance - Unused. Relic of 16-bit Windows. Always 0.
-        lpCmdLine - Command line args.
-        nCmdShow - Dictates if window is minimized, maximized, or shown normally.
-    Returns: int (unused by OS but can be used by other processes).
-    WINAPI - Calling Convention - defines the order that parameters appear on the stack.
-*/
+/// @brief Entry point of Windows Program.
+/// @param hInstance Handle to an instance. Used to ID exe in mem.
+/// @param hPrevInstance Unused. Relic of 16-bit Windows. Always 0.
+/// @param lpCmdLine Command line args.
+/// @param nCmdShow Dictates if window is minimized, maximized, or shown normally.
+/// @return int (unused by OS but can be used by other processes).
+//WINAPI - Calling Convention - defines the order that parameters appear on the stack.
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
     
     gameBorder.x = 960;
@@ -145,7 +142,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
             HDC screen = BeginPaint(hwnd, &ps); 
 
             //All painting here.
-            drawScreen(screen, gameBorder, ball, leftPaddle, rightPaddle);
+            drawScreen(screen, ball, leftPaddle, rightPaddle);
 
             //Clears update region.
             EndPaint(hwnd, &ps);
@@ -159,6 +156,9 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
     return 0;
 }
 
+/// @brief Windows thread that controls the gameloop.
+/// @param lpParam Thread data that is passed during thread creation.
+/// @return Completion status of the thread.
 DWORD WINAPI gameLoop(LPVOID lpParam) {
     int player1Score = 0;
     int player2Score = 0;
@@ -197,7 +197,12 @@ DWORD WINAPI gameLoop(LPVOID lpParam) {
     return 0;
 }
 
-void drawScreen(HDC screen, Vector2 dimensions, Block ball, Block leftPaddle, Block rightPaddle) {
+/// @brief Draws the screen of the game.
+/// @param screen Canvas to draw on.
+/// @param ball Struct that stores the ball's information.
+/// @param leftPaddle Struct that stores the left paddle's information.
+/// @param rightPaddle Struct that stores the right paddle's information.
+void drawScreen(HDC screen, Block ball, Block leftPaddle, Block rightPaddle) {
     HBRUSH brush = CreateSolidBrush(RGB(255, 255, 255));
     SelectObject(screen, brush);
 
