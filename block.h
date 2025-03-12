@@ -7,3 +7,4 @@ struct Block {
 } typedef Block;
 
 Vector2 moveBall(Block*, Block, Block, Vector2);
+int hitPaddle(Block, Block);

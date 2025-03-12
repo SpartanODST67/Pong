@@ -37,12 +37,12 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     ball.velocity.y = 5;
 
     leftPaddle.dimensions.x = 20;
-    leftPaddle.dimensions.y = ball.dimensions.y * 4;
+    leftPaddle.dimensions.y = ball.dimensions.y * 10;
     leftPaddle.position.x = 40;
     leftPaddle.position.y = gameBorder.y / 2;
 
     rightPaddle.dimensions.x = 20;
-    rightPaddle.dimensions.y = ball.dimensions.y * 4;
+    rightPaddle.dimensions.y = ball.dimensions.y * 10;
     rightPaddle.position.x = gameBorder.x - 40;
     rightPaddle.position.y = gameBorder.y / 2;
     
@@ -123,8 +123,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
         DispatchMessage(&msg); // Tells OS to call wind proc.
     }
 
-    CloseHandle(gameLoopThread);
-    
+    CloseHandle(gameLoopThread); // Close thread.
+
     return msg.wParam;
 }
 
@@ -166,7 +166,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 }
 
 DWORD WINAPI gameLoop(LPVOID lpParam) {
-    for(int i = 0; i < 1000; i++) {
+    for(int i = 0; i < 2000; i++) {
         ball.position = moveBall(&ball, leftPaddle, rightPaddle, gameBorder);
         InvalidateRect(hwnd, NULL, TRUE); //Invalidates entire window.
         UpdateWindow(hwnd); //Forces repaint.
