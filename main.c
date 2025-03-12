@@ -177,12 +177,37 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 }
 
 DWORD WINAPI gameLoop(LPVOID lpParam) {
-    for(int i = 0; i < 2000; i++) {
+    int player1Score = 0;
+    int player2Score = 0;
+    BOOL scored = FALSE;
+    
+    while(player1Score < 10 && player2Score < 10) {
         ball.position = moveBall(&ball, leftPaddle, rightPaddle, gameBorder);
+    
+        if(ball.position.x - (ball.dimensions.x / 2) <= 0) {
+            player2Score++;
+            scored = TRUE;
+        }
+        else if(ball.position.x + (ball.dimensions.x / 2) >= gameBorder.x) {
+            player1Score++;
+            scored = TRUE;
+        }
+
+        if(scored) {
+            scored = FALSE;
+        }
+        
         InvalidateRect(hwnd, NULL, TRUE); //Invalidates entire window.
         UpdateWindow(hwnd); //Forces repaint.
         Sleep((1.0f/60.0f) * 1000.0f);
     }
+
+    char* victoryText;
+    if(player1Score > player2Score) victoryText = "Player 1 Wins!";
+    else victoryText = "Player 2 Wins!";
+
+    while(MessageBox(hwnd, victoryText, "Game Over!", MB_ICONEXCLAMATION | MB_OK) != IDOK);
+    PostMessage(hwnd, WM_CLOSE, 0, 0);
 
     return 0;
 }
