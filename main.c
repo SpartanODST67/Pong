@@ -40,14 +40,14 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     leftPaddle.dimensions.y = ball.dimensions.y * 10;
     leftPaddle.position.x = 40;
     leftPaddle.position.y = gameBorder.y / 2;
-    leftPaddle.velocity.y = 5;
+    leftPaddle.velocity.y = 10;
     leftPaddle.velocity.x = 0;
 
     rightPaddle.dimensions.x = 20;
     rightPaddle.dimensions.y = ball.dimensions.y * 10;
     rightPaddle.position.x = gameBorder.x - 40;
     rightPaddle.position.y = gameBorder.y / 2;
-    rightPaddle.velocity.y = 5;
+    rightPaddle.velocity.y = 10;
     rightPaddle.velocity.x = 0;
 
     WNDCLASSEX wc;
@@ -149,8 +149,12 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
             PostQuitMessage(0); //Used to break out of message loop.
             break;
         case WM_CHAR:
-            leftPaddle.position = movePaddle((char) wParam, leftPaddle);
+        {
+            char pushedKey = (char) wParam;
+            if(pushedKey == 'w' || pushedKey == 's') leftPaddle.position = movePaddle(pushedKey, leftPaddle, gameBorder);
+            else if(pushedKey == 'i' || pushedKey == 'k') rightPaddle.position = movePaddle(pushedKey, rightPaddle, gameBorder);
             break;
+        }
         case WM_PAINT: //When a portion of the window needs to be repainted.
         {
             PAINTSTRUCT ps;

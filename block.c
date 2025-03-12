@@ -51,7 +51,20 @@ int hitPaddle(Block ball, Block paddle) {
     return 1;
 }
 
-Vector2 movePaddle(char key, Block paddle) {
-    paddle.position.y += paddle.velocity.y;
+Vector2 movePaddle(char key, Block paddle, Vector2 gameBorders) {
+    if(key == 'w' || key == 'i') {
+        paddle.position.y -= paddle.velocity.y;
+    }
+    else if(key == 's' || key == 'k') {
+        paddle.position.y += paddle.velocity.y;
+    }
+
+    if(paddle.position.y - (paddle.dimensions.y / 2) < 0) {
+        paddle.position.y = paddle.dimensions.y / 2;
+    }
+    else if(paddle.position.y + (paddle.dimensions.y / 2) > gameBorders.y) {
+        paddle.position.y = gameBorders.y - (paddle.dimensions.y / 2);
+    }
+
     return paddle.position;
 }

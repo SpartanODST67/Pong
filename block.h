@@ -8,4 +8,4 @@ struct Block {
 
 Vector2 moveBall(Block*, Block, Block, Vector2);
 int hitPaddle(Block, Block);
-Vector2 movePaddle(char, Block);
+Vector2 movePaddle(char, Block, Vector2);
