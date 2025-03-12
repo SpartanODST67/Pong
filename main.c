@@ -40,12 +40,16 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     leftPaddle.dimensions.y = ball.dimensions.y * 10;
     leftPaddle.position.x = 40;
     leftPaddle.position.y = gameBorder.y / 2;
+    leftPaddle.velocity.y = 5;
+    leftPaddle.velocity.x = 0;
 
     rightPaddle.dimensions.x = 20;
     rightPaddle.dimensions.y = ball.dimensions.y * 10;
     rightPaddle.position.x = gameBorder.x - 40;
     rightPaddle.position.y = gameBorder.y / 2;
-    
+    rightPaddle.velocity.y = 5;
+    rightPaddle.velocity.x = 0;
+
     WNDCLASSEX wc;
     MSG msg;
     
@@ -143,6 +147,9 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
             break;
         case WM_DESTROY: // When window is no longer visible but is about to be destroyed (before any child windows are destroyed).
             PostQuitMessage(0); //Used to break out of message loop.
+            break;
+        case WM_CHAR:
+            leftPaddle.position = movePaddle((char) wParam, leftPaddle);
             break;
         case WM_PAINT: //When a portion of the window needs to be repainted.
         {

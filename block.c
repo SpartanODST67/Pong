@@ -50,3 +50,8 @@ int hitPaddle(Block ball, Block paddle) {
     //The ball is in bounds of the paddle.
     return 1;
 }
+
+Vector2 movePaddle(char key, Block paddle) {
+    paddle.position.y += paddle.velocity.y;
+    return paddle.position;
+}
