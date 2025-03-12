@@ -30,20 +30,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     gameBorder.y = 520;
 
     ball = createBall(gameBorder.x / 2, gameBorder.y / 2, 0);
-
-    leftPaddle.dimensions.x = 20;
-    leftPaddle.dimensions.y = ball.dimensions.y * 10;
-    leftPaddle.position.x = 40;
-    leftPaddle.position.y = gameBorder.y / 2;
-    leftPaddle.velocity.y = 10;
-    leftPaddle.velocity.x = 0;
-
-    rightPaddle.dimensions.x = 20;
-    rightPaddle.dimensions.y = ball.dimensions.y * 10;
-    rightPaddle.position.x = gameBorder.x - 40;
-    rightPaddle.position.y = gameBorder.y / 2;
-    rightPaddle.velocity.y = 10;
-    rightPaddle.velocity.x = 0;
+    leftPaddle = createPaddle(gameBorder, 40, -1);
+    rightPaddle = createPaddle(gameBorder, 40, 1);
 
     WNDCLASSEX wc;
     MSG msg;

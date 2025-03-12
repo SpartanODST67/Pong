@@ -34,6 +34,20 @@ Block createBall(float xCord, float yCord, int direction) {
     return ball;
 }
 
+Block createPaddle(Vector2 gameBorder, float xOffset, int side) {
+    float xCord;
+    if(side < 0) {
+        xCord = xOffset; 
+    }
+    else {
+        xCord = gameBorder.x - xOffset;
+    }
+    
+    Block paddle = createBlock(20, 100, xCord, gameBorder.y / 2, 0, 10);
+
+    return paddle;
+}
+
 Vector2 moveBall(Block* ball, Block leftPaddle, Block rightPaddle, Vector2 gameBorder) {
     ball->position.x += ball->velocity.x;
     ball->position.y += ball->velocity.y;
@@ -85,7 +99,7 @@ int hitPaddle(Block ball, Block paddle) {
     return 1;
 }
 
-Vector2 movePaddle(char key, Block paddle, Vector2 gameBorders) {
+Vector2 movePaddle(char key, Block paddle, Vector2 gameBorder) {
     if(key == 'w' || key == 'i') {
         paddle.position.y -= paddle.velocity.y;
     }
@@ -96,8 +110,8 @@ Vector2 movePaddle(char key, Block paddle, Vector2 gameBorders) {
     if(paddle.position.y - (paddle.dimensions.y / 2) < 0) {
         paddle.position.y = paddle.dimensions.y / 2;
     }
-    else if(paddle.position.y + (paddle.dimensions.y / 2) > gameBorders.y) {
-        paddle.position.y = gameBorders.y - (paddle.dimensions.y / 2);
+    else if(paddle.position.y + (paddle.dimensions.y / 2) > gameBorder.y) {
+        paddle.position.y = gameBorder.y - (paddle.dimensions.y / 2);
     }
 
     return paddle.position;
