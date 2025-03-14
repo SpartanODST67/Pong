@@ -1,5 +1,10 @@
 #include "vector2.h"
 
+#define PLAYER_ONE_UP 'w'
+#define PLAYER_TWO_UP 'i'
+#define PLAYER_ONE_DOWN 's'
+#define PLAYER_TWO_DOWN 'k'
+
 struct Block {
     Vector2 position;
     Vector2 dimensions;

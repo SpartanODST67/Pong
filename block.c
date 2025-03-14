@@ -133,10 +133,10 @@ int hitPaddle(Block ball, Block paddle) {
 /// @param gameBorder Struct storing the values of the game border.
 /// @return new position of the paddle.
 Vector2 movePaddle(char key, Block paddle, Vector2 gameBorder) {
-    if(key == 'w' || key == 'i') {
+    if(key == PLAYER_ONE_UP || key == PLAYER_TWO_UP) {
         paddle.position.y -= paddle.velocity.y;
     }
-    else if(key == 's' || key == 'k') {
+    else if(key == PLAYER_ONE_DOWN || key == PLAYER_TWO_DOWN) {
         paddle.position.y += paddle.velocity.y;
     }
 

@@ -6,6 +6,7 @@
 DWORD WINAPI gameLoop(LPVOID);
 void drawScreen(HDC, Block, Block, Block);
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
+void handleInput(char);
 
 const char windowClassName[] = "PongWindowClass";
 Vector2 gameBorder;
@@ -129,12 +130,8 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
             PostQuitMessage(0); //Used to break out of message loop.
             break;
         case WM_CHAR:
-        {
-            char pushedKey = (char) wParam;
-            if(pushedKey == 'w' || pushedKey == 's') leftPaddle.position = movePaddle(pushedKey, leftPaddle, gameBorder);
-            else if(pushedKey == 'i' || pushedKey == 'k') rightPaddle.position = movePaddle(pushedKey, rightPaddle, gameBorder);
+            handleInput((char) wParam);
             break;
-        }
         case WM_PAINT: //When a portion of the window needs to be repainted.
         {
             PAINTSTRUCT ps;
@@ -195,6 +192,11 @@ DWORD WINAPI gameLoop(LPVOID lpParam) {
     PostMessage(hwnd, WM_CLOSE, 0, 0);
 
     return 0;
+}
+
+void handleInput(char pushedKey) {
+    if(pushedKey == PLAYER_ONE_UP || pushedKey == PLAYER_ONE_DOWN) leftPaddle.position = movePaddle(pushedKey, leftPaddle, gameBorder);
+    else if(pushedKey == PLAYER_TWO_UP || pushedKey == PLAYER_TWO_DOWN) rightPaddle.position = movePaddle(pushedKey, rightPaddle, gameBorder);
 }
 
 /// @brief Draws the screen of the game.
