@@ -3,10 +3,20 @@
 
 #include "block.h"
 
+struct GameStateInfo {
+    Vector2 gameBorder;
+    Block ball;
+    Block leftPaddle;
+    Block rightPaddle;
+    int player1Score;
+    int player2Score;
+} typedef GameStateInfo;
+
 DWORD WINAPI gameLoop(LPVOID);
 void drawScreen(HDC, Block, Block, Block);
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
-void handleInput(char);
+GameStateInfo* GetAppState(HWND);
+void handleInput(char, Block*, Block*);
 
 const char windowClassName[] = "PongWindowClass";
 Vector2 gameBorder;
@@ -23,7 +33,16 @@ HWND hwnd;
 /// @return int (unused by OS but can be used by other processes).
 //WINAPI - Calling Convention - defines the order that parameters appear on the stack.
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
-    
+    HANDLE heap = GetProcessHeap();
+
+    GameStateInfo* gameState = HeapAlloc(heap, 0, sizeof(GameStateInfo)); //Allocate Memory
+    gameState->gameBorder.x = 960;
+    gameState->gameBorder.y = 520;
+
+    gameState->ball = createBall(gameState->gameBorder.x / 2, gameState->gameBorder.y / 2, 0);
+    gameState->leftPaddle = createPaddle(gameState->gameBorder, 40, -1);
+    gameState->rightPaddle = createPaddle(gameState->gameBorder, 40, 1);
+
     gameBorder.x = 960;
     gameBorder.y = 520;
 
@@ -71,7 +90,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
         NULL,       // Parent Window (Null for top level windows)
         NULL,       // Menu
         hInstance,  // Instance Handle
-        NULL        // Additional application data (void*) for wind proc.
+        gameState   // Additional application data (void*) for wind proc.
     );
 
     if(hwnd == NULL) {
@@ -88,7 +107,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
         NULL, // Security attributes (Default)
         0, // Stack size (Default)
         gameLoop, // Thread function
-        NULL, // Argument to thread func
+        gameState, // Argument to thread func
         0, // Creation flags (default)
         &gameLoopThreadID // Returns Thread ID.
     );
@@ -109,6 +128,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     }
 
     CloseHandle(gameLoopThread); // Close thread.
+    HeapFree(heap, 0, gameState);
 
     return msg.wParam;
 }
@@ -121,7 +141,18 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 /// @return Int val that represents response to message.
 //  CALLBACK: calling convention. 
 LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
+    GameStateInfo* gameState;
+    if(msg == WM_CREATE) {
+        CREATESTRUCT* pCreate = (CREATESTRUCT*)lParam;
+        gameState = (GameStateInfo*) pCreate->lpCreateParams;
+        SetWindowLongPtr(hwnd, GWLP_USERDATA, (LONG_PTR)gameState);    
+    }
+    else {
+        gameState = GetAppState(hwnd);
+    }
+
     switch(msg) {
+        
         case WM_CLOSE: // When user clicks the X or CTRL + F4.
             //Default wind proc behaviour already does this.
             DestroyWindow(hwnd);
@@ -130,7 +161,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
             PostQuitMessage(0); //Used to break out of message loop.
             break;
         case WM_CHAR:
-            handleInput((char) wParam);
+            handleInput((char) wParam, &(gameState->leftPaddle), &(gameState->rightPaddle));
             break;
         case WM_PAINT: //When a portion of the window needs to be repainted.
         {
@@ -139,7 +170,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
             HDC screen = BeginPaint(hwnd, &ps); 
 
             //All painting here.
-            drawScreen(screen, ball, leftPaddle, rightPaddle);
+            drawScreen(screen, gameState->ball, gameState->leftPaddle, gameState->rightPaddle);
 
             //Clears update region.
             EndPaint(hwnd, &ps);
@@ -151,6 +182,12 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
     }
 
     return 0;
+}
+
+inline GameStateInfo* GetAppState(HWND hwnd) {
+    LONG_PTR ptr = GetWindowLongPtr(hwnd, GWLP_USERDATA);
+    GameStateInfo* pState = (GameStateInfo*) ptr;
+    return pState;
 }
 
 /// @brief Windows thread that controls the gameloop.
@@ -194,9 +231,9 @@ DWORD WINAPI gameLoop(LPVOID lpParam) {
     return 0;
 }
 
-void handleInput(char pushedKey) {
-    if(pushedKey == PLAYER_ONE_UP || pushedKey == PLAYER_ONE_DOWN) leftPaddle.position = movePaddle(pushedKey, leftPaddle, gameBorder);
-    else if(pushedKey == PLAYER_TWO_UP || pushedKey == PLAYER_TWO_DOWN) rightPaddle.position = movePaddle(pushedKey, rightPaddle, gameBorder);
+void handleInput(char pushedKey, Block* leftPaddle, Block* rightPaddle) {
+    if(pushedKey == PLAYER_ONE_UP || pushedKey == PLAYER_ONE_DOWN) leftPaddle->position = movePaddle(pushedKey, *leftPaddle, gameBorder);
+    else if(pushedKey == PLAYER_TWO_UP || pushedKey == PLAYER_TWO_DOWN) rightPaddle->position = movePaddle(pushedKey, *rightPaddle, gameBorder);
 }
 
 /// @brief Draws the screen of the game.
