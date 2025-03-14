@@ -215,4 +215,94 @@ void drawScreen(HDC screen, GameStateInfo gameState) {
                 gameState.rightPaddle.position.y + (gameState.rightPaddle.dimensions.y / 2),
                 gameState.rightPaddle.position.x + (gameState.rightPaddle.dimensions.x / 2), 
                 gameState.rightPaddle.position.y - (gameState.rightPaddle.dimensions.y / 2));
+
+    Vector2 p1ScorePos = gameState.gameBorder;
+    p1ScorePos.x = p1ScorePos.x / 4;
+    p1ScorePos.y = p1ScorePos.y / 6;
+
+    Vector2 p2ScorePos = gameState.gameBorder;
+    p2ScorePos.x = (p2ScorePos.x * 3.0f / 4.0f);
+    p2ScorePos.y = p2ScorePos.y / 6;
+
+    drawScores(screen, brush, gameState.player1Score, gameState.player2Score, p1ScorePos, p2ScorePos);
+}
+
+void drawScores(HDC screen, HBRUSH color, int player1Score, int player2Score, Vector2 p1Pos, Vector2 p2Pos) {
+    drawScore(screen, color, player1Score, p1Pos);
+    drawScore(screen, color, player2Score, p2Pos);
+}
+
+void drawScore(HDC screen, HBRUSH color, int score, Vector2 pos) {
+    switch(score) {
+        case 1:
+            drawNumberOne(screen, color, pos);
+            break;
+        case 2:
+            drawNumberTwo(screen, color, pos);
+            break;
+        case 3:
+            drawNumberThree(screen, color, pos);
+            break;
+        case 4:
+            drawNumberFour(screen, color, pos);
+            break;
+        case 5:
+            drawNumberFive(screen, color, pos);
+            break;
+        case 6:
+            drawNumberSix(screen, color, pos);
+            break;
+        case 7:
+            drawNumberSeven(screen, color, pos);
+            break;
+        case 8:
+            drawNumberEight(screen, color, pos);
+            break;
+        case 9:
+            drawNumberNine(screen, color, pos);
+            break;
+        default:
+            drawNumberZero(screen, color, pos);
+            break;
+    }
+} 
+
+void drawNumberZero(HDC screen, HBRUSH color, Vector2 pos) {
+
+}
+
+void drawNumberOne(HDC screen, HBRUSH color, Vector2 pos) {
+    Rectangle(screen, pos.x - 10, pos.y + 40, pos.x + 10, pos.y - 40);
+}
+
+void drawNumberTwo(HDC screen, HBRUSH color, Vector2 pos) {
+
+}
+
+void drawNumberThree(HDC screen, HBRUSH color, Vector2 pos) {
+
+}
+
+void drawNumberFour(HDC screen, HBRUSH color, Vector2 pos) {
+
+}
+
+void drawNumberFive(HDC screen, HBRUSH color, Vector2 pos) {
+
+}
+
+void drawNumberSix(HDC screen, HBRUSH color, Vector2 pos) {
+
+}
+
+void drawNumberSeven(HDC screen, HBRUSH color, Vector2 pos) {
+
+}
+
+void drawNumberEight(HDC screen, HBRUSH color, Vector2 pos) {
+
+}
+
+void drawNumberNine(HDC screen, HBRUSH color, Vector2 pos) {
+
 }
