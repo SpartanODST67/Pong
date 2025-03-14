@@ -268,41 +268,79 @@ void drawScore(HDC screen, HBRUSH color, int score, Vector2 pos) {
 } 
 
 void drawNumberZero(HDC screen, HBRUSH color, Vector2 pos) {
-
+    Rectangle(screen, pos.x - 30, pos.y - 40, pos.x + 30, pos.y - 30); //Top
+    Rectangle(screen, pos.x - 30, pos.y - 30, pos.x - 20, pos.y - 5); //Top left
+    Rectangle(screen, pos.x + 20, pos.y - 30, pos.x + 30, pos.y - 5); //Top right
+    Rectangle(screen, pos.x - 30, pos.y + 5, pos.x - 20, pos.y + 30); //Bottom left
+    Rectangle(screen, pos.x + 20, pos.y + 5, pos.x + 30, pos.y + 30); //Bottom right
+    Rectangle(screen, pos.x - 30, pos.y + 30, pos.x + 30, pos.y + 40); //Bottom
 }
 
 void drawNumberOne(HDC screen, HBRUSH color, Vector2 pos) {
-    Rectangle(screen, pos.x - 10, pos.y + 40, pos.x + 10, pos.y - 40);
+    Rectangle(screen, pos.x - 30, pos.y - 30, pos.x - 20, pos.y - 5); //Top left
+    Rectangle(screen, pos.x - 30, pos.y + 5, pos.x - 20, pos.y + 30); //Bottom left
 }
 
 void drawNumberTwo(HDC screen, HBRUSH color, Vector2 pos) {
-
+    Rectangle(screen, pos.x - 30, pos.y - 40, pos.x + 30, pos.y - 30); //Top
+    Rectangle(screen, pos.x + 20, pos.y - 30, pos.x + 30, pos.y - 5); //Top right
+    Rectangle(screen, pos.x - 30, pos.y - 5, pos.x + 30, pos.y + 5); //Middle
+    Rectangle(screen, pos.x - 30, pos.y + 5, pos.x - 20, pos.y + 30); //Bottom left
+    Rectangle(screen, pos.x - 30, pos.y + 30, pos.x + 30, pos.y + 40); //Bottom
 }
 
 void drawNumberThree(HDC screen, HBRUSH color, Vector2 pos) {
-
+    Rectangle(screen, pos.x - 30, pos.y - 40, pos.x + 30, pos.y - 30); //Top
+    Rectangle(screen, pos.x + 20, pos.y - 30, pos.x + 30, pos.y - 5); //Top right
+    Rectangle(screen, pos.x - 30, pos.y - 5, pos.x + 30, pos.y + 5); //Middle
+    Rectangle(screen, pos.x + 20, pos.y + 5, pos.x + 30, pos.y + 30); //Bottom right
+    Rectangle(screen, pos.x - 30, pos.y + 30, pos.x + 30, pos.y + 40); //Bottom
 }
 
 void drawNumberFour(HDC screen, HBRUSH color, Vector2 pos) {
-
+    Rectangle(screen, pos.x - 30, pos.y - 30, pos.x - 20, pos.y - 5); //Top left
+    Rectangle(screen, pos.x + 20, pos.y - 30, pos.x + 30, pos.y - 5); //Top right
+    Rectangle(screen, pos.x - 30, pos.y - 5, pos.x + 30, pos.y + 5); //Middle
+    Rectangle(screen, pos.x + 20, pos.y + 5, pos.x + 30, pos.y + 30); //Bottom right
 }
 
 void drawNumberFive(HDC screen, HBRUSH color, Vector2 pos) {
-
+    Rectangle(screen, pos.x - 30, pos.y - 40, pos.x + 30, pos.y - 30); //Top
+    Rectangle(screen, pos.x - 30, pos.y - 30, pos.x - 20, pos.y - 5); //Top left
+    Rectangle(screen, pos.x - 30, pos.y - 5, pos.x + 30, pos.y + 5); //Middle
+    Rectangle(screen, pos.x + 20, pos.y + 5, pos.x + 30, pos.y + 30); //Bottom right
+    Rectangle(screen, pos.x - 30, pos.y + 30, pos.x + 30, pos.y + 40); //Bottom
 }
 
 void drawNumberSix(HDC screen, HBRUSH color, Vector2 pos) {
-
+    Rectangle(screen, pos.x - 30, pos.y - 40, pos.x + 30, pos.y - 30); //Top
+    Rectangle(screen, pos.x - 30, pos.y - 30, pos.x - 20, pos.y - 5); //Top left
+    Rectangle(screen, pos.x - 30, pos.y - 5, pos.x + 30, pos.y + 5); //Middle
+    Rectangle(screen, pos.x - 30, pos.y + 5, pos.x - 20, pos.y + 30); //Bottom left
+    Rectangle(screen, pos.x + 20, pos.y + 5, pos.x + 30, pos.y + 30); //Bottom right
+    Rectangle(screen, pos.x - 30, pos.y + 30, pos.x + 30, pos.y + 40); //Bottom
 }
 
 void drawNumberSeven(HDC screen, HBRUSH color, Vector2 pos) {
-
+    Rectangle(screen, pos.x - 30, pos.y - 40, pos.x + 30, pos.y - 30); //Top
+    Rectangle(screen, pos.x + 20, pos.y - 30, pos.x + 30, pos.y - 5); //Top right
+    Rectangle(screen, pos.x + 20, pos.y + 5, pos.x + 30, pos.y + 30); //Bottom right
 }
 
 void drawNumberEight(HDC screen, HBRUSH color, Vector2 pos) {
-
+    Rectangle(screen, pos.x - 30, pos.y - 40, pos.x + 30, pos.y - 30); //Top
+    Rectangle(screen, pos.x - 30, pos.y - 30, pos.x - 20, pos.y - 5); //Top left
+    Rectangle(screen, pos.x + 20, pos.y - 30, pos.x + 30, pos.y - 5); //Top right
+    Rectangle(screen, pos.x - 30, pos.y - 5, pos.x + 30, pos.y + 5); //Middle
+    Rectangle(screen, pos.x - 30, pos.y + 5, pos.x - 20, pos.y + 30); //Bottom left
+    Rectangle(screen, pos.x + 20, pos.y + 5, pos.x + 30, pos.y + 30); //Bottom right
+    Rectangle(screen, pos.x - 30, pos.y + 30, pos.x + 30, pos.y + 40); //Bottom
 }
 
 void drawNumberNine(HDC screen, HBRUSH color, Vector2 pos) {
-
+    Rectangle(screen, pos.x - 30, pos.y - 40, pos.x + 30, pos.y - 30); //Top
+    Rectangle(screen, pos.x - 30, pos.y - 30, pos.x - 20, pos.y - 5); //Top left
+    Rectangle(screen, pos.x + 20, pos.y - 30, pos.x + 30, pos.y - 5); //Top right
+    Rectangle(screen, pos.x - 30, pos.y - 5, pos.x + 30, pos.y + 5); //Middle
+    Rectangle(screen, pos.x + 20, pos.y + 5, pos.x + 30, pos.y + 30); //Bottom right
 }
