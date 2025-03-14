@@ -3,6 +3,7 @@
 
 #include "block.h"
 
+/// @brief Stores the state of the game.
 struct GameStateInfo {
     Vector2 gameBorder;
     Block ball;
@@ -12,10 +13,34 @@ struct GameStateInfo {
     int player2Score;
 } typedef GameStateInfo;
 
+/// @brief Windows thread that controls the gameloop.
+/// @param lpParam Thread data that is passed during thread creation.
+/// @return Completion status of the thread.
 DWORD WINAPI gameLoop(LPVOID);
+
+/// @brief Draws the screen of the game.
+/// @param gameState State of the game to reflect.
 void drawScreen(HDC, GameStateInfo);
+
+/// @brief Handles the message that targeted the window. Typically a large switch statement that defines the behaviour of each response.
+/// @param hwnd Window Handle. 
+/// @param msg Message code to handle.
+/// @param wParam Additional data to the message. Int vals of size of pointer width. Look up message to cast to proper data type.
+/// @param lParam Additional data to the message. Int vals of size of pointer width. Look up message to cast to proper data type.
+/// @return Int val that represents response to message.
+//  CALLBACK: calling convention.
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
+
+/// @brief Obtains the game state.
+/// @param hwnd Window Handle.
+/// @return the game state.
 GameStateInfo* GetAppState(HWND);
+
+/// @brief Handles the key input from the user.
+/// @param pushedKey Key that was inputted.
+/// @param leftPaddle reference to the left paddle.
+/// @param rightPaddle reference to the right paddle.
+/// @param gameBorder dimensions of the game space.
 void handleInput(char, Block*, Block*, Vector2);
 
 const char windowClassName[] = "PongWindowClass";
@@ -121,14 +146,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
     return msg.wParam;
 }
-
-/// @brief Handles the message that targeted the window. Typically a large switch statement that defines the behaviour of each response.
-/// @param hwnd Window Handle. 
-/// @param msg Message code to handle.
-/// @param wParam Additional data to the message. Int vals of size of pointer width. Look up message to cast to proper data type.
-/// @param lParam Additional data to the message. Int vals of size of pointer width. Look up message to cast to proper data type.
-/// @return Int val that represents response to message.
-//  CALLBACK: calling convention. 
+ 
 LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
     GameStateInfo* gameState;
     if(msg == WM_CREATE) {
@@ -179,9 +197,6 @@ inline GameStateInfo* GetAppState(HWND hwnd) {
     return pState;
 }
 
-/// @brief Windows thread that controls the gameloop.
-/// @param lpParam Thread data that is passed during thread creation.
-/// @return Completion status of the thread.
 DWORD WINAPI gameLoop(LPVOID lpParam) {
     GameStateInfo* gameState = (GameStateInfo*)lpParam;
     int scored = 0;
@@ -224,11 +239,6 @@ void handleInput(char pushedKey, Block* leftPaddle, Block* rightPaddle, Vector2 
     else if(pushedKey == PLAYER_TWO_UP || pushedKey == PLAYER_TWO_DOWN) rightPaddle->position = movePaddle(pushedKey, *rightPaddle, gameBorder);
 }
 
-/// @brief Draws the screen of the game.
-/// @param screen Canvas to draw on.
-/// @param ball Struct that stores the ball's information.
-/// @param leftPaddle Struct that stores the left paddle's information.
-/// @param rightPaddle Struct that stores the right paddle's information.
 void drawScreen(HDC screen, GameStateInfo gameState) {
     HBRUSH brush = CreateSolidBrush(RGB(255, 255, 255));
     SelectObject(screen, brush);
