@@ -23,6 +23,39 @@ struct GameStateInfo {
 /// @return Completion status of the thread.
 DWORD WINAPI gameLoop(LPVOID);
 
+/// @brief Handles the message that targeted the window. Typically a large switch statement that defines the behaviour of each response.
+/// @param hwnd Window Handle. 
+/// @param msg Message code to handle.
+/// @param wParam Additional data to the message. Int vals of size of pointer width. Look up message to cast to proper data type.
+/// @param lParam Additional data to the message. Int vals of size of pointer width. Look up message to cast to proper data type.
+/// @return Int val that represents response to message.
+//  CALLBACK: calling convention.
+LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
+
+/// @brief Obtains the game state.
+/// @param hwnd Window Handle.
+/// @return the game state.
+GameStateInfo* GetAppState(HWND);
+
+/// @brief Reads key user key presses.
+/// @param leftPaddle reference to the left paddle.
+/// @param rightPaddle reference to the right paddle.
+/// @param gameBorder dimensions of the game space.
+/// @param aIActive active status of AI opponent.
+/// @return Integer that denotes if AI needs to be deactivated.
+int inputHandler(Block*, Block*, Vector2, int);
+
+/// @brief Handles the key input from the user.
+/// @param pushedKey Key that was inputted.
+/// @param leftPaddle reference to the left paddle.
+/// @param rightPaddle reference to the right paddle.
+/// @param gameBorder dimensions of the game space.
+void handleInput(char, Block*, Block*, Vector2);
+
+/// @brief Handles AI control.
+/// @param gameStateInfo state of the game.
+void aIMove(GameStateInfo*);
+
 /// @brief Draws the screen of the game.
 /// @param gameState State of the game to reflect.
 void drawScreen(HDC, GameStateInfo);
@@ -102,32 +135,5 @@ void drawNumberEight(HDC, HBRUSH, Vector2);
 /// @param color Color of number.
 /// @param pos Position to draw on screen.
 void drawNumberNine(HDC, HBRUSH, Vector2);
-
-/// @brief Handles the message that targeted the window. Typically a large switch statement that defines the behaviour of each response.
-/// @param hwnd Window Handle. 
-/// @param msg Message code to handle.
-/// @param wParam Additional data to the message. Int vals of size of pointer width. Look up message to cast to proper data type.
-/// @param lParam Additional data to the message. Int vals of size of pointer width. Look up message to cast to proper data type.
-/// @return Int val that represents response to message.
-//  CALLBACK: calling convention.
-LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
-
-/// @brief Obtains the game state.
-/// @param hwnd Window Handle.
-/// @return the game state.
-GameStateInfo* GetAppState(HWND);
-
-/// @brief Reads key user key presses.
-/// @param leftPaddle reference to the left paddle.
-/// @param rightPaddle reference to the right paddle.
-/// @param gameBorder dimensions of the game space.
-void inputHandler(Block*, Block*, Vector2);
-
-/// @brief Handles the key input from the user.
-/// @param pushedKey Key that was inputted.
-/// @param leftPaddle reference to the left paddle.
-/// @param rightPaddle reference to the right paddle.
-/// @param gameBorder dimensions of the game space.
-void handleInput(char, Block*, Block*, Vector2);
 
 #endif

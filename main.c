@@ -154,10 +154,13 @@ inline GameStateInfo* GetAppState(HWND hwnd) {
 DWORD WINAPI gameLoop(LPVOID lpParam) {
     GameStateInfo* gameState = (GameStateInfo*)lpParam;
     int scored = 0;
-    
+    int aIActive = 1;
+
     while(gameState->player1Score < 10 && gameState->player2Score < 10) {
-        inputHandler(&(gameState->leftPaddle), &(gameState->rightPaddle), gameState->gameBorder);
+        aIActive = inputHandler(&(gameState->leftPaddle), &(gameState->rightPaddle), gameState->gameBorder, aIActive);
         
+        if(aIActive == 1) aIMove(gameState);
+
         gameState->ball.position = moveBall(&(gameState->ball), gameState->leftPaddle, gameState->rightPaddle, gameState->gameBorder);
     
         if(gameState->ball.position.x - (gameState->ball.dimensions.x / 2) <= 0) {
@@ -190,7 +193,7 @@ DWORD WINAPI gameLoop(LPVOID lpParam) {
     return 0;
 }
 
-void inputHandler(Block* leftPaddle, Block* rightPaddle, Vector2 gameBorder) {
+int inputHandler(Block* leftPaddle, Block* rightPaddle, Vector2 gameBorder, int aIActive) {
     const char p1UpConst = toupper(PLAYER_ONE_UP);
     const char p1DownConst = toupper(PLAYER_ONE_DOWN);
     const char p2UpConst = toupper(PLAYER_TWO_UP);
@@ -203,16 +206,47 @@ void inputHandler(Block* leftPaddle, Block* rightPaddle, Vector2 gameBorder) {
         handleInput(PLAYER_ONE_DOWN, leftPaddle, rightPaddle, gameBorder);
     }
     if((GetAsyncKeyState(p2UpConst) & 0x8000) != 0) {
+        if(aIActive == 1) aIActive = 0;
         handleInput(PLAYER_TWO_UP, leftPaddle, rightPaddle, gameBorder);
     }
     if((GetAsyncKeyState(p2DownConst) & 0x8000) != 0) {
+        if(aIActive == 1) aIActive = 0;
         handleInput(PLAYER_TWO_DOWN, leftPaddle, rightPaddle, gameBorder);
     }
+
+    return aIActive;
 }
 
 void handleInput(char pushedKey, Block* leftPaddle, Block* rightPaddle, Vector2 gameBorder) {
     if(pushedKey == PLAYER_ONE_UP || pushedKey == PLAYER_ONE_DOWN) leftPaddle->position = movePaddle(pushedKey, *leftPaddle, gameBorder);
     else if(pushedKey == PLAYER_TWO_UP || pushedKey == PLAYER_TWO_DOWN) rightPaddle->position = movePaddle(pushedKey, *rightPaddle, gameBorder);
+}
+
+void aIMove(GameStateInfo* gameStateInfo) {
+    static LONG activationDelay = 0; // So the second player has a chance to input key before AI kicks in.
+    if(activationDelay++ < 60) return;
+    
+    static LONG calls = 0;
+    int moveDecision = 0;
+
+    if(calls % 2 == 0) {
+        if(gameStateInfo->ball.velocity.y < 0 &&
+            gameStateInfo->ball.position.y < gameStateInfo->rightPaddle.position.y - gameStateInfo->rightPaddle.dimensions.y / 2) moveDecision = 1;
+        else if(gameStateInfo->ball.velocity.y > 0 &&
+            gameStateInfo->ball.position.y > gameStateInfo->rightPaddle.position.y + gameStateInfo->rightPaddle.dimensions.y / 2) moveDecision = -1;
+        else moveDecision = 0;
+    }
+
+    switch(moveDecision) {
+        case 1:
+            handleInput(PLAYER_TWO_UP, &(gameStateInfo->leftPaddle), &(gameStateInfo->rightPaddle), gameStateInfo->gameBorder);
+            break;
+        case -1:
+            handleInput(PLAYER_TWO_DOWN, &(gameStateInfo->leftPaddle), &(gameStateInfo->rightPaddle), gameStateInfo->gameBorder);
+            break;
+    }
+
+    calls++;
 }
 
 void drawScreen(HDC screen, GameStateInfo gameState) {
