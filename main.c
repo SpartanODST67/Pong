@@ -124,9 +124,6 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
         case WM_DESTROY: // When window is no longer visible but is about to be destroyed (before any child windows are destroyed).
             PostQuitMessage(0); //Used to break out of message loop.
             break;
-        case WM_CHAR:
-            handleInput((char) wParam, &(gameState->leftPaddle), &(gameState->rightPaddle), gameState->gameBorder);
-            break;
         case WM_PAINT: //When a portion of the window needs to be repainted.
         {
             PAINTSTRUCT ps;
@@ -159,6 +156,8 @@ DWORD WINAPI gameLoop(LPVOID lpParam) {
     int scored = 0;
     
     while(gameState->player1Score < 10 && gameState->player2Score < 10) {
+        inputHandler(&(gameState->leftPaddle), &(gameState->rightPaddle), gameState->gameBorder);
+        
         gameState->ball.position = moveBall(&(gameState->ball), gameState->leftPaddle, gameState->rightPaddle, gameState->gameBorder);
     
         if(gameState->ball.position.x - (gameState->ball.dimensions.x / 2) <= 0) {
@@ -189,6 +188,21 @@ DWORD WINAPI gameLoop(LPVOID lpParam) {
     PostMessage(hwnd, WM_CLOSE, 0, 0);
 
     return 0;
+}
+
+void inputHandler(Block* leftPaddle, Block* rightPaddle, Vector2 gameBorder) {
+    if((GetAsyncKeyState('W') & 0x8000) != 0) {
+        handleInput('w', leftPaddle, rightPaddle, gameBorder);
+    }
+    if((GetAsyncKeyState('S') & 0x8000) != 0) {
+        handleInput('s', leftPaddle, rightPaddle, gameBorder);
+    }
+    if((GetAsyncKeyState('I') & 0x8000) != 0) {
+        handleInput('i', leftPaddle, rightPaddle, gameBorder);
+    }
+    if((GetAsyncKeyState('K') & 0x8000) != 0) {
+        handleInput('k', leftPaddle, rightPaddle, gameBorder);
+    }
 }
 
 void handleInput(char pushedKey, Block* leftPaddle, Block* rightPaddle, Vector2 gameBorder) {

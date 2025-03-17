@@ -116,6 +116,12 @@ LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
 /// @return the game state.
 GameStateInfo* GetAppState(HWND);
 
+/// @brief Reads key user key presses.
+/// @param leftPaddle reference to the left paddle.
+/// @param rightPaddle reference to the right paddle.
+/// @param gameBorder dimensions of the game space.
+void inputHandler(Block*, Block*, Vector2);
+
 /// @brief Handles the key input from the user.
 /// @param pushedKey Key that was inputted.
 /// @param leftPaddle reference to the left paddle.
