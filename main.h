@@ -2,6 +2,7 @@
 #define MAIN_H
 
 #include <stdio.h>
+#include <ctype.h>
 #include <Windows.h>
 
 #include "main.h"

@@ -191,17 +191,22 @@ DWORD WINAPI gameLoop(LPVOID lpParam) {
 }
 
 void inputHandler(Block* leftPaddle, Block* rightPaddle, Vector2 gameBorder) {
-    if((GetAsyncKeyState('W') & 0x8000) != 0) {
-        handleInput('w', leftPaddle, rightPaddle, gameBorder);
+    const char p1UpConst = toupper(PLAYER_ONE_UP);
+    const char p1DownConst = toupper(PLAYER_ONE_DOWN);
+    const char p2UpConst = toupper(PLAYER_TWO_UP);
+    const char p2DownConst = toupper(PLAYER_TWO_DOWN);
+
+    if((GetAsyncKeyState(p1UpConst) & 0x8000) != 0) {
+        handleInput(PLAYER_ONE_UP, leftPaddle, rightPaddle, gameBorder);
     }
-    if((GetAsyncKeyState('S') & 0x8000) != 0) {
-        handleInput('s', leftPaddle, rightPaddle, gameBorder);
+    if((GetAsyncKeyState(p1DownConst) & 0x8000) != 0) {
+        handleInput(PLAYER_ONE_DOWN, leftPaddle, rightPaddle, gameBorder);
     }
-    if((GetAsyncKeyState('I') & 0x8000) != 0) {
-        handleInput('i', leftPaddle, rightPaddle, gameBorder);
+    if((GetAsyncKeyState(p2UpConst) & 0x8000) != 0) {
+        handleInput(PLAYER_TWO_UP, leftPaddle, rightPaddle, gameBorder);
     }
-    if((GetAsyncKeyState('K') & 0x8000) != 0) {
-        handleInput('k', leftPaddle, rightPaddle, gameBorder);
+    if((GetAsyncKeyState(p2DownConst) & 0x8000) != 0) {
+        handleInput(PLAYER_TWO_DOWN, leftPaddle, rightPaddle, gameBorder);
     }
 }
 
